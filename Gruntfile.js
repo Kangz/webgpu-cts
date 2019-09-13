@@ -41,12 +41,23 @@ module.exports = function(grunt) {
     },
 
     copy: {
+      glslang: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/@webgpu/glslang/web',
+            src: 'glslang.{js,wasm}',
+            dest: 'out/',
+          },
+        ],
+      },
       'out-wpt': {
         files: [
           { expand: true, cwd: 'wpt', src: 'cts.html', dest: 'out-wpt/' },
           { expand: true, cwd: 'out', src: 'framework/**/*.js', dest: 'out-wpt/' },
           { expand: true, cwd: 'out', src: 'suites/cts/**/*.js', dest: 'out-wpt/' },
           { expand: true, cwd: 'out', src: 'runtime/wpt.js', dest: 'out-wpt/' },
+          //{ expand: true, cwd: 'out', src: 'glslang.{js,wasm}', dest: 'out-wpt/' },
         ],
       },
     },
@@ -91,6 +102,7 @@ module.exports = function(grunt) {
   registerTaskAndAddToHelp('build', 'Build out/ (without type checking)', [
     'clean',
     'mkdir:out',
+    'copy:glslang',
     'run:build-out',
     'run:generate-version',
     'run:generate-listings',
