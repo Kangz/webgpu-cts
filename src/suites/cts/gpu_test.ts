@@ -90,6 +90,10 @@ export class GPUTest extends Fixture {
   // TODO: add an expectContents for textures, which logs data: uris on failure
 
   expectContents(src: GPUBuffer, expected: ArrayBufferView): void {
+    this.expectSubContents(src, 0, expected);
+  }
+
+  expectSubContents(src: GPUBuffer, start: number, expected: ArrayBufferView): void {
     const exp = new Uint8Array(expected.buffer, expected.byteOffset, expected.byteLength);
 
     const size = expected.buffer.byteLength;
@@ -99,7 +103,7 @@ export class GPUTest extends Fixture {
     });
 
     const c = this.device.createCommandEncoder();
-    c.copyBufferToBuffer(src, 0, dst, 0, size);
+    c.copyBufferToBuffer(src, start, dst, 0, size);
 
     this.queue.submit([c.finish()]);
 
